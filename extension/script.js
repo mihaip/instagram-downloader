@@ -14,11 +14,12 @@ try {
     var sharedData = JSON.parse(sharedDataJson);
 
     var caption = sharedData.entry_data.PostPage[0].media.caption;
-    // Remove hashtags and trailing punctutation
+    // Remove hashtags, question marks and trailing punctutation.
     caption = caption
         .replace(/#\w+/g, "")
         .trim()
-        .replace(/\.+$/, "")
+        .replace(/\?/g, "")
+        .replace(/[.!]+$/, "")
         .trim();
 
     filename = caption + ".jpeg";
