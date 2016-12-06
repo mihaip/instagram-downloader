@@ -6,6 +6,9 @@
     },
     "name": "Instagram Downloader",
     "description": "Save images from Instagram.",
+    "icons": {
+        "128": "icon-128.png"
+    },
     "page_action": {
         "default_icon": {
             "16": "icon-16.png",
