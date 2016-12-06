@@ -14,13 +14,17 @@ try {
     var sharedData = JSON.parse(sharedDataJson);
 
     var caption = sharedData.entry_data.PostPage[0].media.caption;
-    // Remove hashtags, question marks and trailing punctutation.
+    // Remove hashtags, question marks and trailing periods.
     caption = caption
         .replace(/#\w+/g, "")
         .trim()
-        .replace(/\?/g, "")
-        .replace(/[.!]+$/, "")
+        .replace(/[?:]/g, "")
+        .replace(/\.+$/, "")
         .trim();
+
+    if (caption.length > 200) {
+        caption = caption.substring(0, 200);
+    }
 
     filename = caption + ".jpeg";
 } catch (ex) {};
