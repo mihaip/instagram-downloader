@@ -7,3 +7,5 @@ Chrome extension to help with downloading of images from Instagram. Unlike [alte
 * Generates filenames based on the caption of the image
 
 Currently only works on permalink pages.
+
+Available in the Chrome Web Store as [https://chrome.google.com/webstore/detail/akgbekdpgegfglbmldaljbeihfcgbofl](https://chrome.google.com/webstore/detail/akgbekdpgegfglbmldaljbeihfcgbofl).
