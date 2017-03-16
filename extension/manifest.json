@@ -4,7 +4,7 @@
         "persistent": false,
         "scripts": ["background.js"]
     },
-    "name": "Instagram Downloader",
+    "name": "'gram Downloader",
     "description": "Save images from Instagram.",
     "icons": {
         "128": "icon-128.png"
@@ -21,5 +21,5 @@
         "activeTab",
         "downloads"
     ],
-    "version": "1.0"
+    "version": "1.0.1"
 }
