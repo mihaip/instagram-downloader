@@ -55,6 +55,9 @@ function generateFilename(caption) {
     if (caption.length > 200) {
         caption = caption.substring(0, 200);
     }
+    if (!caption) {
+        caption = "image";
+    }
     return caption + ".jpeg";
 }
 
