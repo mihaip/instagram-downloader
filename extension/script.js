@@ -1,19 +1,34 @@
-function run() {
+async function run() {
     try {
-        const imageNode = document.querySelector("img[srcset]");
-        const srcMap = new Map(imageNode.srcset
-            .split(",")
-            .map(src => src.split(" ").reverse()));
-        const imageUrl = srcMap.get("1080w");
-
-        chrome.runtime.sendMessage({
-            type: "download",
-            url: imageUrl,
-            filename: generateFilename(imageNode.alt)
+        // Find the largest visible image.
+        const imageNodes = document.querySelectorAll("img");
+        const visibleAreas = await elementVisibleAreas(imageNodes);
+        const sortedImageNodes = Array.from(imageNodes).sort((a, b) => {
+            return visibleAreas.get(b) - visibleAreas.get(a);
         });
-        return;
+        const imageNode = sortedImageNodes[0];
+        let imageUrl;
+        // Prefer to use srcset, because we can then get the highest resolution
+        // image.
+        if (imageNode.srcset) {
+            const srcMap = new Map(imageNode.srcset
+                .split(",")
+                .map(src => src.split(" ").reverse()));
+            imageUrl = srcMap.get("1080w");
+        } else {
+            imageUrl = imageNode.src;
+        }
+
+        if (imageUrl) {
+            chrome.runtime.sendMessage({
+                type: "download",
+                url: imageUrl,
+                filename: generateFilename(imageNode.alt)
+            });
+            return;
+        }
     } catch (err) {
-        console.warn("Could not extract current image, falling back on metadata.");
+        console.warn("Could not extract current image, falling back on metadata.", err);
     }
 
     var imageUrl = document.querySelector("meta[property='og:image']")
@@ -40,6 +55,22 @@ function run() {
         type: "download",
         url: imageUrl,
         filename: filename
+    });
+}
+
+function elementVisibleAreas(elements) {
+    return new Promise(resolve => {
+        const o = new IntersectionObserver(entries => {
+            const result = new Map(entries.map(entry => [
+                entry.target,
+                entry.intersectionRect.width * entry.intersectionRect.height
+            ]));
+            o.disconnect();
+            resolve(result);
+        });
+        for (const element of elements) {
+            o.observe(element);
+        }
     });
 }
 
